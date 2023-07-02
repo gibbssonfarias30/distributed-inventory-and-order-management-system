@@ -1,0 +1,20 @@
+server:
+  port: 8877
+
+spring:
+  application:
+    name: products-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/ms_products?serverTimezone=UTC
+    username: postgres
+    password: 246
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: update

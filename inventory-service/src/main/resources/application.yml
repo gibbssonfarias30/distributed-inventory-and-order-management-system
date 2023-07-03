@@ -1,0 +1,20 @@
+server:
+  port: 8699
+
+spring:
+  application:
+    name: inventory-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/ms_inventory?serverTimezone=UTC
+    username: postgres
+    password: 246
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: update

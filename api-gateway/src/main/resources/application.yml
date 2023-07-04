@@ -8,17 +8,17 @@ spring:
     gateway:
       routes:
         - id: inventory-service
-          uri: http://localhost:8699
+          uri: lb://inventory-service
           predicates:
             - Path=/api/v1/inventory/**
 
         - id: orders-service
-          uri: http://localhost:8988
+          uri: lb://orders-service
           predicates:
             - Path=/api/v1/orders/**
 
         - id: products-service
-          uri: http://localhost:8877
+          uri: lb://products-service
           predicates:
             - Path=/api/v1/products/**
 

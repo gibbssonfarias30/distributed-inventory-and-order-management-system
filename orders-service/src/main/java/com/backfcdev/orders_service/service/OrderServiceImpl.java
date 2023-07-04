@@ -29,7 +29,7 @@ public class OrderServiceImpl implements IOrderService {
         //Check for inventory
         BaseResponse result = this.webClient.build()
                 .post()
-                .uri("http://localhost:8699/api/v1/inventory/in-stock")
+                .uri("http://localhost:8090/api/v1/inventory/in-stock")
                 .bodyValue(orderRequest.getOrderItems())
                 .retrieve()
                 .bodyToMono(BaseResponse.class)

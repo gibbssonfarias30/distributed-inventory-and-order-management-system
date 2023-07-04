@@ -21,3 +21,11 @@ spring:
           uri: http://localhost:8877
           predicates:
             - Path=/api/v1/products/**
+
+#Eureka client
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

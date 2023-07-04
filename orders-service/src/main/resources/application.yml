@@ -17,3 +17,11 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: update
+
+#Eureka client
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

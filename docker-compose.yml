@@ -22,8 +22,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_DB: ms_orders
-      MYSQL_USER: root
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: gibb
     ports:
       - 3307:3306
     expose:

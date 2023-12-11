@@ -1,0 +1,46 @@
+version: '3'
+services:
+  ### Postgres database for Inventory
+  db-inventory:
+    container_name: db-inventory
+    image: postgres:16.1
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ms_inventory
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: gibb
+    ports:
+      - 5431:5432
+    expose:
+      - 5431
+    command: -p 5431
+
+  ### MySQL database for Orders
+  db-orders:
+    container_name: db-orders
+    image: mysql:8.0.35
+    restart: unless-stopped
+    environment:
+      MYSQL_DB: ms_orders
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3307:3306
+    expose:
+      - 3307
+
+  ### Postgres database for Inventory
+  db-products:
+    container_name: db-products
+    image: postgres:16.1
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ms_products
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: gibb
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    command: -p 5432
+

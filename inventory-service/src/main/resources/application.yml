@@ -5,9 +5,9 @@ spring:
   application:
     name: inventory-service
   datasource:
-    url: jdbc:postgresql://localhost:5433/ms_inventory?serverTimezone=UTC
+    url: jdbc:postgresql://localhost:5432/ms_inventory
     username: postgres
-    password: 246
+    password: gibb
     driver-class-name: org.postgresql.Driver
   jpa:
     properties:

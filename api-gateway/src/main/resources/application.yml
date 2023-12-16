@@ -37,6 +37,21 @@ spring:
         - SaveSession
         - TokenRelay
 
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8181/realms/microservices-realm
+        registration:
+          keycloak:
+            provider: keycloak
+            scope: openid
+            client-id: microservices-client
+            client-secret: VLDN3M8TFCDZvR2NvXWMokyrr6W50dVr
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+
 #Eureka client
 eureka:
   client:

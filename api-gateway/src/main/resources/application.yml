@@ -22,6 +22,21 @@ spring:
           predicates:
             - Path=/api/v1/products/**
 
+        - id: discovery-service
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/web
+          filters:
+            - SetPath=/
+
+        - id: discovery-service-static
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/**
+      default-filters:
+        - SaveSession
+        - TokenRelay
+
 #Eureka client
 eureka:
   client:

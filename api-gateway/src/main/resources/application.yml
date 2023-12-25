@@ -47,8 +47,8 @@ spring:
           keycloak:
             provider: keycloak
             scope: openid
-            client-id: microservices-client
-            client-secret: VLDN3M8TFCDZvR2NvXWMokyrr6W50dVr
+            client-id: microservices_client
+            client-secret: gUEGXwlrU7eTbA992bWnLP56dPsSbZyn
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
 

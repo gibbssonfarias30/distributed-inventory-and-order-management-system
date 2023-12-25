@@ -6,6 +6,7 @@ import com.backfcdev.products_service.model.dto.ProductResponse;
 import com.backfcdev.products_service.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,12 +23,14 @@ public class ProductController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     ResponseEntity<ProductResponse> addProduct(@RequestBody ProductRequest request) {
         return ResponseEntity.status(CREATED)
                 .body(productService.addProduct(request));
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
     ResponseEntity<List<ProductResponse>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
     }

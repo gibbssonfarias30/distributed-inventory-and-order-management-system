@@ -33,3 +33,12 @@ eureka:
       default-zone: http://eureka:password@localhost:8761/eureka
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+
+#Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /actuator/inventory

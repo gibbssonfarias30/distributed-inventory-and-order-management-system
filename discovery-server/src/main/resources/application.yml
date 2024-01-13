@@ -20,3 +20,12 @@ eureka:
     service-url:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 
+
+#Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /actuator
+

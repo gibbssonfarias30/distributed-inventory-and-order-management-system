@@ -32,3 +32,31 @@ eureka:
       default-zone: http://eureka:password@localhost:8761/eureka
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+
+#Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /actuator/orders
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+
+#Resilience4j - Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      orders-service:
+        register-health-indicator: true
+        sliding-window-size: 5
+        sliding-window-type: count_based
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        automatic-transition-from-open-to-half-open-enabled: true
+        permitted-number-of-calls-in-half-open-state: 3

@@ -60,3 +60,9 @@ resilience4j:
         wait-duration-in-open-state: 10s
         automatic-transition-from-open-to-half-open-enabled: true
         permitted-number-of-calls-in-half-open-state: 3
+
+#Kafka
+spring.kafka.bootstrap-servers: localhost:9092
+spring.kafka.producer.retries: 1
+spring.kafka.producer.key-serializer: org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer: org.apache.kafka.common.serialization.StringSerializer

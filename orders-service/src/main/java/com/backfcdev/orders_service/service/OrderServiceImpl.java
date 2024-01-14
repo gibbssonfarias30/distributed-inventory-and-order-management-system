@@ -1,12 +1,16 @@
 package com.backfcdev.orders_service.service;
 
 
+import com.backfcdev.orders_service.events.OrderEvent;
 import com.backfcdev.orders_service.model.dto.*;
 import com.backfcdev.orders_service.model.entities.Order;
 import com.backfcdev.orders_service.model.entities.OrderItems;
+import com.backfcdev.orders_service.model.enums.OrderStatus;
 import com.backfcdev.orders_service.repository.IOrderRepository;
+import com.backfcdev.orders_service.utils.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -22,11 +26,12 @@ public class OrderServiceImpl implements IOrderService {
 
     private final IOrderRepository orderRepository;
     private final WebClient.Builder webClient;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
 
     @Override
-    public void placeOrder(OrderRequest orderRequest) {
-        //Check for inventory
+    public OrderResponse placeOrder(OrderRequest orderRequest) {
+        //TODO: Check for inventory
         BaseResponse result = this.webClient.build()
                 .post()
                 .uri("lb://inventory-service/api/v1/inventory/in-stock")
@@ -45,7 +50,13 @@ public class OrderServiceImpl implements IOrderService {
                 .stream()
                 .map(orderItemRequest -> mapOrderItemRequestToOrderItem(orderItemRequest, order))
                 .toList());
-        this.orderRepository.save(order);
+
+        // TODO: Send message to order topic
+        this.kafkaTemplate.send("orders-topic", JsonUtils.toJson(
+                new OrderEvent(order.getOrderNumber(), order.getOrderItems().size(), OrderStatus.PLACED)
+        ));
+
+        return mapToOrderResponse(this.orderRepository.save(order));
     }
 
     @Override

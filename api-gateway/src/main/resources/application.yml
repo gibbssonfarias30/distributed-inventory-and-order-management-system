@@ -81,6 +81,8 @@ logging:
     root: info
     org.springframework.cloud.gateway: trace
     org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: info
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
 
 
 #Actuator
@@ -90,3 +92,12 @@ management:
       exposure:
         include: health
       base-path: /actuator
+
+
+#Tracing
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans

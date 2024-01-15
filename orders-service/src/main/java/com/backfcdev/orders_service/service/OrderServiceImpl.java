@@ -8,6 +8,8 @@ import com.backfcdev.orders_service.model.entities.OrderItems;
 import com.backfcdev.orders_service.model.enums.OrderStatus;
 import com.backfcdev.orders_service.repository.IOrderRepository;
 import com.backfcdev.orders_service.utils.JsonUtils;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -27,36 +29,43 @@ public class OrderServiceImpl implements IOrderService {
     private final IOrderRepository orderRepository;
     private final WebClient.Builder webClient;
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObservationRegistry observationRegistry;
 
 
     @Override
     public OrderResponse placeOrder(OrderRequest orderRequest) {
-        //TODO: Check for inventory
-        BaseResponse result = this.webClient.build()
-                .post()
-                .uri("lb://inventory-service/api/v1/inventory/in-stock")
-                .bodyValue(orderRequest.getOrderItems())
-                .retrieve()
-                .bodyToMono(BaseResponse.class)
-                .block();
 
-        Optional.ofNullable(result)
-                .filter(r -> !r.hasErrors())
-                .orElseThrow(() -> new IllegalArgumentException("Some of the products are not in stock"));
+        Observation inventoryObservation = Observation.createNotStarted("inventory-service", observationRegistry);
 
-        Order order = new Order();
-        order.setOrderNumber(UUID.randomUUID().toString());
-        order.setOrderItems(orderRequest.getOrderItems()
-                .stream()
-                .map(orderItemRequest -> mapOrderItemRequestToOrderItem(orderItemRequest, order))
-                .toList());
+        return inventoryObservation.observe(() -> {
+            //TODO: Check for inventory
+            BaseResponse result = this.webClient.build()
+                    .post()
+                    .uri("lb://inventory-service/api/v1/inventory/in-stock")
+                    .bodyValue(orderRequest.getOrderItems())
+                    .retrieve()
+                    .bodyToMono(BaseResponse.class)
+                    .block();
 
-        // TODO: Send message to order topic
-        this.kafkaTemplate.send("orders-topic", JsonUtils.toJson(
-                new OrderEvent(order.getOrderNumber(), order.getOrderItems().size(), OrderStatus.PLACED)
-        ));
+            Optional.ofNullable(result)
+                    .filter(r -> !r.hasErrors())
+                    .orElseThrow(() -> new IllegalArgumentException("Some of the products are not in stock"));
 
-        return mapToOrderResponse(this.orderRepository.save(order));
+            Order order = new Order();
+            order.setOrderNumber(UUID.randomUUID().toString());
+            order.setOrderItems(orderRequest.getOrderItems()
+                    .stream()
+                    .map(orderItemRequest -> mapOrderItemRequestToOrderItem(orderItemRequest, order))
+                    .toList());
+
+            // TODO: Send message to order topic
+            this.kafkaTemplate.send("orders-topic", JsonUtils.toJson(
+                    new OrderEvent(order.getOrderNumber(), order.getOrderItems().size(), OrderStatus.PLACED)
+            ));
+
+            return mapToOrderResponse(this.orderRepository.save(order));
+        });
+
     }
 
     @Override

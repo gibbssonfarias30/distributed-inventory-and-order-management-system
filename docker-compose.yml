@@ -106,4 +106,10 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
+  ### Zipkin
+  zipkin:
+    container_name: zipkin-01
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
 

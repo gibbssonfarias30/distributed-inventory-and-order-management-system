@@ -26,8 +26,8 @@ management:
   endpoints:
     web:
       exposure:
-        include: health
-      base-path: /actuator
+        include: health,prometheus
+      base-path: /actuator/discovery
 
   #Tracing
   tracing:

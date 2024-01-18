@@ -28,11 +28,14 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .securityMatcher("/**")
-                .authorizeHttpRequests(authRequest ->
-                        authRequest.anyRequest().authenticated())
+                .authorizeHttpRequests(auth-> {
+                    auth.requestMatchers(request ->
+                                    request.getRequestURI().contains("/actuator/products"))
+                            .permitAll();
+                    auth.anyRequest().authenticated();
+                })
                 .oauth2ResourceServer(configure -> configure.jwt(jwtConfigurer ->
-                                jwtConfigurer.jwtAuthenticationConverter(jwtAuthConverter())))
+                        jwtConfigurer.jwtAuthenticationConverter(jwtAuthConverter())))
                 .build();
     }
 

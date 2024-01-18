@@ -1,6 +1,7 @@
 package com.backfcdev.orders_service.config;
 
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -22,13 +23,17 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .securityMatcher("/**")
-                .authorizeHttpRequests(authRequest ->
-                        authRequest.anyRequest().authenticated())
+                .authorizeHttpRequests(auth-> {
+                    auth.requestMatchers(request ->
+                                    request.getRequestURI().contains("/actuator/orders"))
+                            .permitAll();
+                    auth.anyRequest().authenticated();
+                })
                 .oauth2ResourceServer(configure -> configure.jwt(jwtConfigurer ->
-                                jwtConfigurer.jwtAuthenticationConverter(jwtAuthConverter())))
+                        jwtConfigurer.jwtAuthenticationConverter(jwtAuthConverter())))
                 .build();
     }
 

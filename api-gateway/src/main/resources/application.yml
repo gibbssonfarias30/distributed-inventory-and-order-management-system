@@ -49,6 +49,11 @@ spring:
           predicates:
             - Path=/actuator/products/**
 
+        - id: discovery-service-actuator
+          uri: http://localhost:8761/actuator/discovery/**
+          predicates:
+            - Path=/actuator/discovery/**
+
       default-filters:
         - SaveSession
         - TokenRelay
@@ -90,7 +95,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health,prometheus
       base-path: /actuator
 
 

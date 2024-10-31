@@ -1,0 +1,58 @@
+server:
+  servlet:
+    context-path: /api/v1
+  port: 8699
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ms_inventory
+    username: gibbssonfarias
+    password: gibb246
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+#Keycloak
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8181/realms/microservices-realm/protocol/openid-connect/certs
+
+#Eureka client
+eureka:
+  client:
+    service-url:
+      default-zone: http://eureka:password@localhost:8761/eureka
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+
+#Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+      base-path: /actuator/inventory
+
+#Tracing
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+logging:
+  level:
+    root: info
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"

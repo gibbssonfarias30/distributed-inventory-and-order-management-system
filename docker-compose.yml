@@ -7,10 +7,10 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_DB: ms_inventory
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: gibb
+      POSTGRES_USER: gibbssonfarias
+      POSTGRES_PASSWORD: gibb246
     ports:
-      - 5431:5432
+      - "5431:5432"
     expose:
       - 5431
     command: -p 5431
@@ -22,38 +22,38 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_DB: ms_orders
-      MYSQL_ROOT_PASSWORD: gibb
+      MYSQL_ROOT_PASSWORD: 123456
     ports:
-      - 3307:3306
+      - "3307:3306"
     expose:
       - 3307
 
-  ### Postgres database for Inventory
+  ### Postgres database for Products
   db-products:
     container_name: db-products
     image: postgres:16.1
     restart: unless-stopped
     environment:
       POSTGRES_DB: ms_products
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: gibb
+      POSTGRES_USER: gibbssonfarias
+      POSTGRES_PASSWORD: gibb246
     ports:
-      - 5432:5432
+      - "5430:5432"
     expose:
-      - 5432
-    command: -p 5432
+      - 5430
+    command: -p 5430
 
   ### Postgres database for Keycloak
   db-keycloak:
     container_name: db-keycloak
-    image: postgres:16.1
+    image: postgres:latest
     restart: unless-stopped
     environment:
       POSTGRES_DB: db_keycloak
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: gibb
+      POSTGRES_USER: gibbssonfarias
+      POSTGRES_PASSWORD: gibb246
     ports:
-      - 5433:5432
+      - "5433:5432"
     expose:
       - 5433
     command: -p 5433
@@ -64,7 +64,7 @@ services:
     image: quay.io/keycloak/keycloak:23.0.0
     command: ["start-dev"]
     ports:
-      - 8181:8181
+      - "8181:8181"
     expose:
       - 8181
     depends_on:

@@ -14,7 +14,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/orders")
+@RequestMapping("/orders")
 public class OrderController {
 
     private final IOrderService orderService;

@@ -1,6 +1,4 @@
-version: '3'
 services:
-  ### Postgres database for Inventory
   db-inventory:
     container_name: db-inventory
     image: postgres:16.1
@@ -11,24 +9,21 @@ services:
       POSTGRES_PASSWORD: gibb246
     ports:
       - "5431:5432"
-    expose:
-      - 5431
-    command: -p 5431
+    volumes:
+      - postgres_inventory_data:/var/lib/postgresql/data
 
-  ### MySQL database for Orders
   db-orders:
     container_name: db-orders
     image: mysql:8.0.35
     restart: unless-stopped
     environment:
-      MYSQL_DB: ms_orders
+      MYSQL_DATABASE: ms_orders
       MYSQL_ROOT_PASSWORD: 123456
     ports:
-      - "3307:3306"
-    expose:
-      - 3307
+      - "3306:3306"
+    volumes:
+      - mysql_orders_data:/var/lib/mysql
 
-  ### Postgres database for Products
   db-products:
     container_name: db-products
     image: postgres:16.1
@@ -39,11 +34,10 @@ services:
       POSTGRES_PASSWORD: gibb246
     ports:
       - "5430:5432"
-    expose:
-      - 5430
-    command: -p 5430
+    volumes:
+      - postgres_products_data:/var/lib/postgresql/data
 
-  ### Postgres database for Keycloak
+
   db-keycloak:
     container_name: db-keycloak
     image: postgres:latest
@@ -58,7 +52,6 @@ services:
       - 5433
     command: -p 5433
 
-  ### Keycloak
   keycloak:
     container_name: keycloak
     image: quay.io/keycloak/keycloak:23.0.0
@@ -81,7 +74,6 @@ services:
       KC_HTTP_PORT: 8181
 
 
-  ### Zookeeper
   zookeeper:
     container_name: zookeeper
     image: confluentinc/cp-zookeeper:7.4.0
@@ -89,7 +81,6 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
-  ### Kafka
   kafka:
     container_name: kafka
     image: confluentinc/cp-kafka:7.4.0
@@ -106,14 +97,12 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
-  ### Zipkin
   zipkin:
     container_name: zipkin-01
     image: openzipkin/zipkin:latest
     ports:
       - "9411:9411"
 
-  ### Prometheus
   prometheus:
     container_name: prometheus
     image: prom/prometheus:v2.46.0
@@ -122,7 +111,6 @@ services:
     volumes:
       - ./files/prometheus.yml:/etc/prometheus/prometheus.yml
 
-  ### Grafana
   grafana:
     container_name: grafana
     image: grafana/grafana-oss:10.0.3
@@ -140,3 +128,10 @@ services:
       GF_SECURITY_ADMIN_USER: admin
     depends_on:
       - prometheus
+
+
+volumes:
+  postgres_inventory_data:
+  postgres_products_data:
+  postgres_keycloak_data:
+  mysql_orders_data:

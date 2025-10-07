@@ -6,7 +6,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/ms_products
+    url: jdbc:postgresql://localhost:5430/ms_products
     username: gibbssonfarias
     password: gibb246
   jpa:

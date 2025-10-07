@@ -5,7 +5,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/ms_inventory
+    url: jdbc:postgresql://localhost:5431/ms_inventory
     username: gibbssonfarias
     password: gibb246
     driver-class-name: org.postgresql.Driver

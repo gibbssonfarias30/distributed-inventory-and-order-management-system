@@ -56,7 +56,7 @@ public class OrderServiceImpl implements IOrderService {
             order.setOrderNumber(UUID.randomUUID().toString());
             order.setOrderItems(orderRequest.getOrderItems()
                     .stream()
-                    .map(orderMapper::convertToOrderItems)
+                    .map(orderItemRequest -> orderMapper.convertToOrderItems(orderItemRequest, order))
                     .toList());
 
             // Send message to order topic

@@ -21,17 +21,16 @@ public class ProductController {
 
     private final IProductService productService;
 
+    @GetMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
+    ResponseEntity<List<ProductResponse>> findAll() {
+        return ResponseEntity.ok(productService.findAll());
+    }
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    ResponseEntity<ProductResponse> addProduct(@RequestBody ProductRequest request) {
+    ResponseEntity<ProductResponse> save(@RequestBody ProductRequest request) {
         return ResponseEntity.status(CREATED)
-                .body(productService.addProduct(request));
-    }
-
-    @GetMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
-    ResponseEntity<List<ProductResponse>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+                .body(productService.save(request));
     }
 }

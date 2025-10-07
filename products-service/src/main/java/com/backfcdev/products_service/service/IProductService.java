@@ -6,7 +6,6 @@ import com.backfcdev.products_service.model.dto.ProductResponse;
 import java.util.List;
 
 public interface IProductService {
-    ProductResponse addProduct(ProductRequest productRequest);
-
-    List<ProductResponse> getAllProducts();
+    List<ProductResponse> findAll();
+    ProductResponse save(ProductRequest productRequest);
 }

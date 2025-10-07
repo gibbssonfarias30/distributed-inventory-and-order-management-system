@@ -8,5 +8,5 @@ import java.util.List;
 public interface IOrderService {
     OrderResponse placeOrder(OrderRequest orderRequest);
 
-    List<OrderResponse> getAllOrders();
+    List<OrderResponse> findAll();
 }

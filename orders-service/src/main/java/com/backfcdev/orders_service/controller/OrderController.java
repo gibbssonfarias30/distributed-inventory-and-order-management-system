@@ -21,8 +21,8 @@ public class OrderController {
 
 
     @GetMapping
-    ResponseEntity<List<OrderResponse>> getAllOrders() {
-        return ResponseEntity.ok(orderService.getAllOrders());
+    ResponseEntity<List<OrderResponse>> findAll() {
+        return ResponseEntity.ok(orderService.findAll());
     }
 
     @PostMapping
